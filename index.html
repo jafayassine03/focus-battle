@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- intro screen — shown on first load, dismissed on click or after 3s -->
   <div id="intro">
     <div id="intro-inner">
       <p id="intro-eyebrow">It's time to work</p>
@@ -18,48 +17,63 @@
     </div>
   </div>
 
-  <!-- full-screen flash overlay for HP loss / XP steal -->
   <div id="flash-overlay"></div>
-
-  <!-- particle background -->
   <canvas id="bg-canvas"></canvas>
 
-  <!-- top bar -->
   <header id="top-bar">
     <h1>Focus Battle</h1>
+
     <div id="stats-bar">
-      <div class="stat" id="boss-incoming-stat" style="display:none">
+
+      <div class="stat hidden" id="boss-incoming-stat">
         <span class="stat-label boss-warn">⚠ BOSS</span>
       </div>
+
       <div class="stat">
         <span class="stat-label">LVL</span>
         <span id="level">1</span>
       </div>
+
       <div class="stat">
         <span class="stat-label">HP</span>
         <div class="bar-track"><div class="bar-fill" id="hp-fill"></div></div>
         <span id="hp-val">100</span>
       </div>
+
       <div class="stat">
         <span class="stat-label">XP</span>
         <div class="bar-track"><div class="bar-fill xp" id="xp-fill"></div></div>
         <span id="xp-val">0</span>
       </div>
+
       <div class="stat">
         <span class="stat-label">🔥</span>
         <span id="streak-val">0</span>
       </div>
+
+      <div class="stat">
+        <span class="stat-label">🪙</span>
+        <span id="gold-val">0</span>
+      </div>
+
+      <div class="stat">
+        <span class="stat-label">Rank</span>
+        <span id="rank-name">Novice</span>
+      </div>
+
     </div>
+
     <button id="btn-menu" aria-label="Menu">≡</button>
   </header>
 
-  <!-- side drawer -->
   <div id="drawer-overlay" class="hidden"></div>
+
   <nav id="drawer">
     <div id="drawer-header">
       <span id="drawer-title">Menu</span>
       <button id="drawer-close">✕</button>
     </div>
+
     <div id="drawer-nav">
       <button class="drawer-btn" id="btn-shop">Shop</button>
       <button class="drawer-btn" id="btn-inv">Inventory</button>
@@ -70,12 +84,10 @@
     </div>
   </nav>
 
-  <!-- main game area -->
   <main id="main">
 
     <div id="active-items"></div>
 
-    <!-- duration picker -->
     <div id="duration-row">
       <button class="dur-btn active" data-min="25">25m</button>
       <button class="dur-btn" data-min="50">50m</button>
@@ -85,26 +97,58 @@
 
     <div id="custom-input-row" class="hidden">
       <input id="custom-minutes-input" type="number" min="5" max="180" placeholder="5 – 180 minutes" />
-      <span id="custom-hint">Press Enter to confirm</span>
+      <span id="custom-hint">Press Enter</span>
     </div>
 
     <p id="timer">25:00</p>
 
-    <!-- sound visualizer — bars that pulse to the music -->
+    <div id="boss-countdown">
+      Next Boss: <span id="boss-time">15:00</span>
+    </div>
+
+    <div id="combo-meter">
+      Combo x<span id="combo-value">1</span>
+    </div>
+
     <canvas id="viz-canvas" width="200" height="36"></canvas>
 
-    <!-- enemy card -->
     <div id="enemy-card" class="hidden">
+
       <span id="enemy-tier-badge">Common</span>
-      <p id="enemy-name">—</p>
+
+      <img id="enemy-image" src="" alt="Enemy">
+
+      <p id="enemy-name"></p>
+
       <div class="bar-track wide">
         <div class="bar-fill enemy" id="enemy-hp-fill"></div>
       </div>
-      <span id="enemy-hp-text">—</span>
+
+      <span id="enemy-hp-text"></span>
+
       <div id="enemy-ability-row">
-        <span id="enemy-ability-label" class="ability-label">—</span>
-        <span id="enemy-ability-desc" class="ability-desc">—</span>
+        <span id="enemy-ability-label" class="ability-label"></span>
+        <span id="enemy-ability-desc" class="ability-desc"></span>
       </div>
+
+    </div>
+
+    <div id="quest-panel">
+      <h3>Quest</h3>
+      <p id="quest-name">Complete 2 Focus Sessions</p>
+
+      <div class="bar-track wide">
+        <div class="bar-fill xp" id="quest-fill"></div>
+      </div>
+
+      <span id="quest-progress">0 / 2</span>
+    </div>
+
+    <div id="player-card">
+      <h3>Your Hero</h3>
+      <div>Attack: <span id="attack-stat">10</span></div>
+      <div>Defense: <span id="defense-stat">5</span></div>
+      <div>Luck: <span id="luck-stat">3</span></div>
     </div>
 
     <div class="btn-wrapper">
@@ -113,10 +157,10 @@
     </div>
 
     <button id="btn-stop">Stop Session</button>
+    <button id="btn-pause">Pause</button>
 
   </main>
 
-  <!-- daily challenge panel (bottom left) -->
   <div id="daily-challenge">
     <span class="dc-label">Daily</span>
     <p id="dc-desc">—</p>
@@ -126,13 +170,13 @@
     </div>
   </div>
 
-  <!-- modals -->
+  <div id="notification-container"></div>
 
   <div id="shop-modal" class="modal-overlay hidden">
     <div class="modal-panel">
       <button class="modal-close" id="shop-close">✕</button>
       <h2 class="modal-title">Apothecary</h2>
-      <p class="modal-subtitle">Spend your hard-earned XP</p>
+      <p class="modal-subtitle">Spend XP</p>
       <div id="shop-items-grid"></div>
     </div>
   </div>
@@ -141,7 +185,7 @@
     <div class="modal-panel">
       <button class="modal-close" id="inv-close">✕</button>
       <h2 class="modal-title">Inventory</h2>
-      <p class="modal-subtitle">Equip items before your session</p>
+      <p class="modal-subtitle">Equip items</p>
       <div id="inv-items-grid"></div>
     </div>
   </div>
@@ -150,7 +194,7 @@
     <div class="modal-panel">
       <button class="modal-close" id="history-close">✕</button>
       <h2 class="modal-title">History</h2>
-      <p class="modal-subtitle">Your last 20 sessions</p>
+      <p class="modal-subtitle">Last 20 sessions</p>
       <div id="history-list"></div>
     </div>
   </div>
@@ -159,7 +203,7 @@
     <div class="modal-panel">
       <button class="modal-close" id="achievements-close">✕</button>
       <h2 class="modal-title">Feats</h2>
-      <p class="modal-subtitle" id="achievements-count">0 / 12 unlocked</p>
+      <p class="modal-subtitle" id="achievements-count">0 / 12</p>
       <div id="achievements-grid"></div>
     </div>
   </div>
@@ -168,7 +212,7 @@
     <div class="modal-panel">
       <button class="modal-close" id="player-stats-close">✕</button>
       <h2 class="modal-title">Stats</h2>
-      <p class="modal-subtitle">Your lifetime progress</p>
+      <p class="modal-subtitle">Lifetime progress</p>
       <div id="player-stats-grid"></div>
     </div>
   </div>
@@ -177,50 +221,49 @@
     <div class="modal-panel">
       <button class="modal-close" id="settings-close">✕</button>
       <h2 class="modal-title">Settings</h2>
-      <p class="modal-subtitle">Manage your game</p>
+
       <div id="settings-body">
+
         <div class="settings-row">
-          <div class="settings-info">
-            <span class="settings-label">Sound</span>
-            <span class="settings-desc">Ambient music and sound effects</span>
-          </div>
+          <span>Sound</span>
           <button id="settings-mute-btn">On</button>
         </div>
+
         <div class="settings-row">
-          <div class="settings-info">
-            <span class="settings-label">Particles</span>
-            <span class="settings-desc">Animated background effect</span>
-          </div>
+          <span>Particles</span>
           <button id="settings-particles-btn">On</button>
         </div>
+
         <div class="settings-row">
-          <div class="settings-info">
-            <span class="settings-label">Session History</span>
-            <span class="settings-desc">Clear your past sessions log</span>
-          </div>
-          <button id="settings-clear-history-btn">Clear</button>
+          <span>Sound Theme</span>
+          <select id="sound-theme">
+            <option>Rain</option>
+            <option>Forest</option>
+            <option>Ocean</option>
+            <option>Fireplace</option>
+          </select>
         </div>
+
         <div class="settings-row danger-row">
-          <div class="settings-info">
-            <span class="settings-label">Reset Save Data</span>
-            <span class="settings-desc">Wipe all progress — cannot be undone</span>
-          </div>
+          <span>Reset Save</span>
           <button id="settings-reset-btn">Reset</button>
         </div>
+
       </div>
     </div>
   </div>
 
   <div id="death-screen" class="modal-overlay hidden">
     <div class="modal-panel death-panel">
-      <h2 class="death-title">Defeated</h2>
-      <p class="death-sub">Your HP reached zero</p>
+      <h2>Defeated</h2>
+      <p>Your HP reached zero</p>
+
       <div class="regen-block">
-        <span class="regen-label">Next HP regen in</span>
+        <span>Regen in</span>
         <span id="regen-countdown">—</span>
-        <span class="regen-note">+5 HP every 15 min — max 50</span>
       </div>
-      <button id="death-shop-btn">Open Apothecary</button>
+
+      <button id="death-shop-btn">Apothecary</button>
     </div>
   </div>
 
